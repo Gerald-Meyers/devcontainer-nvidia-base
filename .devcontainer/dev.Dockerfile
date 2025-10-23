@@ -65,7 +65,9 @@ RUN \
 # WORKDIR /home/user
 
 # Define the entry point for the container. This is used for additional initialization customization.
-# ENTRYPOINT ["/bin/bash"]
+# VSCode overrides ENTRYPOINT by default to keep the container running. Instead, you use lifecycle scripts like postCreateCommand.
+# This is kept for posterity.
+# ENTRYPOINT ["/path/to/your/script.sh"]
 
 # Filter out informational log messages from TensorFlow
 # ENV TF_CPP_MIN_LOG_LEVEL=0
