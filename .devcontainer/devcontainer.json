@@ -91,7 +91,7 @@
     "test nvidia" : "nvidia-smi",
     "test nvcc" : "nvcc --version",
     "check python version" : "python3 --version",
-    "check tensorflow" : "python3 -c \"import tensorflow as tf; print(f'TensorFlow Version: {tf.__version__}'); gpus = tf.config.list_physical_devices('GPU'); print(f'Found GPUs: {gpus}'); assert len(gpus) > 0, 'ERROR: No GPU detected'\"",
+    "check tensorflow" : "python3 /workspace/src/check_tensorflow.py",
     "test tensorflow" : "python3 /workspace/src/test_tensorflow_gpu_access.py"
   },
 
