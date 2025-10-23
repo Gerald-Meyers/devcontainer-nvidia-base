@@ -10,10 +10,6 @@
 # Specify the TensorFlow image variant to use. This is a known good image that works well.
 FROM tensorflow/tensorflow:2.16.1-gpu
 
-# Filter out informational log messages from TensorFlow
-# ENV TF_CPP_MIN_LOG_LEVEL=0
-ENV TF_CPP_MIN_LOG_LEVEL=1
-
 # Update environment variable
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH}"
 
@@ -71,6 +67,9 @@ RUN \
 # Define the entry point for the container. This is used for additional initialization customization.
 # ENTRYPOINT ["/bin/bash"]
 
+# Filter out informational log messages from TensorFlow
+# ENV TF_CPP_MIN_LOG_LEVEL=0
+ENV TF_CPP_MIN_LOG_LEVEL=1
 
 HEALTHCHECK --interval=5s --timeout=5s \
     --start-period=5s --retries=3 \
