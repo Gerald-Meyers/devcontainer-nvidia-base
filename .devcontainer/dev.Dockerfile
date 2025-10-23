@@ -82,3 +82,12 @@ RUN \
 
 # Define the entry point for the container. This is used for additional initialization customization.
 # ENTRYPOINT ["/bin/bash"]
+
+
+HEALTHCHECK --interval=5s --timeout=5s \
+    --start-period=5s --retries=3 \
+    CMD [ "curl", "-f", "http://localhost:8080/health" ]
+
+LABEL maintainer="Gerald Meyers"
+LABEL description="A tensorflow docker container that can be used for machine learning tasks."
+LABEL version="0.1.0"

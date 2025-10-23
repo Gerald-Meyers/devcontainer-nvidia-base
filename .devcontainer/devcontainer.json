@@ -2,6 +2,10 @@
   "name" : "Tensorflow Devcontainer",
   // "image": "tensorflow/tensorflow:2.16.1-gpu", // If you don't want to build the image yourself, you can use this pre-built image.
 
+  // "dockerComposeFile" : [
+  //   "../docker-compose.yml"
+  // ],
+
   "build" : {
     // Specify the build context and Dockerfile. 
 
@@ -40,6 +44,9 @@
 
     // Keep STDIN open even if not attached
     "-it"
+
+    // Publish port for external access.
+    // "-p 8080:8080"
   ],
 
   "remoteEnv": {
