@@ -5,13 +5,13 @@
   "build" : {
     // Specify the build context and Dockerfile. 
 
-    // "." is used to specify the exact folder containing the Dockerfile.
+    // "." is used to specify the exact folder containing the Dockerfile during the build process.
     // ".." is used to specify the parent folder during the build process.
     "context" : "..",
 
     // Specify the Dockerfile to use for building the image.
     // The name of the file should be provided here, and should be in the same folder as the devcontainer.json file.
-    "dockerfile" : "dev.Dockerfile",
+    "dockerFile" : "dev.Dockerfile",
     
     // Pass build arguments here. These can be used to customize the build process.
     "args": {
