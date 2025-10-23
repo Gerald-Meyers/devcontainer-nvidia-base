@@ -71,7 +71,7 @@
     "test nvcc" : "nvcc --version",
     "check python version" : "python3 --version",
     "check tensorflow" : "python3 -c \"import tensorflow as tf; print(f'TensorFlow Version: {tf.__version__}'); gpus = tf.config.list_physical_devices('GPU'); print(f'Found GPUs: {gpus}'); assert len(gpus) > 0, 'ERROR: No GPU detected'\"",
-    "test tensorflow" : "python3 test_tensorflow_gpu_access.py"
+    "test tensorflow" : "python3 /workspaces/devcontainer_test/src/test_tensorflow_gpu_access.py"
   },
 
 // Defines the mount using Docker's --mount syntax.
