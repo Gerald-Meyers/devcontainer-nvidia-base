@@ -1,40 +1,51 @@
 {
+  // name: Sets the display name for the dev container.
+  // Details: This name appears in the VS Code UI when selecting or managing the container (e.g., in the Remote Explorer).
   "name" : "Tensorflow Devcontainer",
-  // "image": "tensorflow/tensorflow:2.16.1-gpu", // If you don't want to build the image yourself, you can use this pre-built image.
-
+  
+  // dockerComposeFile: Specifies the Docker Compose file(s) used to define the dev container environment.
+  // Details: An array of paths (relative to devcontainer.json) to one or more docker-compose.yml files. VS Code will use 
+  //    Docker Compose to build and run the services defined within these files instead of using the 'build' or 'image' properties. 
+  //    Requires the 'service' property to also be defined.
+  // Use Case: Define multi-container development environments (e.g., application + database + cache) or manage complex 
+  //    single-service configurations using Docker Compose.
   "dockerComposeFile" : [
     "../.devcontainer/docker-compose.yml"
   ],
 
-  // The name of the docker image to be run.
+  // service: Specifies the target service within the Docker Compose setup for VS Code to attach to.
+  // Details: This value MUST match the name of a service defined in the docker-compose.yml file(s) listed in 'dockerComposeFile'. 
+  //    VS Code will connect its UI and terminal to this specific container.
+  // Use Case: Required when using 'dockerComposeFile' to identify the primary development container among potentially multiple 
+  //    services (like app, database, etc.).
   "service": "app",
   
+  // workspaceFolder: Specifies the default directory to open inside the container.
+  // Details: This path inside the container tells VS Code where your project files are located after attaching. 
+  //    It should match the 'target' path of your primary code mount (defined either in 'workspaceMount' or in the Docker Compose file's 'volumes').
+  // Use Case: Ensures VS Code opens the correct folder containing your project code within the container environment.
   "workspaceFolder" : "/workspace",
 
-  // updateContentCommand extends the functionality of the base image.
-  "updateContentCommand" : {
-    // Runs once after the container is created and your source code is cloned or mounted, but before postCreateCommand executes. 
-    // It's specifically intended for tasks that need to happen after the source code is present but before general setup, 
-    // like updating submodules or installing dependencies based on the just-cloned code.
-    // "install dev tools" : "bash .devcontainer/install-dev-tools.sh"
-  },
+  // updateContentCommand: Executes a command/script ONCE.
+  // Timing: Runs after the container is created and your project files are available inside, but before postCreateCommand.
+  // Use Case: For setup needing the source code, like installing requirements from a cloned file or updating Git submodules.
+  // EXAMPLE - "install dev tools" : "bash .devcontainer/install-dev-tools.sh"
+  "updateContentCommand" : {},
 
-  // postCreateCommand
-  "postCreateCommand" : {
-    // Executes once after the container is created, but before VS Code connects. 
-    // This is ideal for one-time setup tasks like installing dependencies, cloning repos, or initializing databases.
-  },
+  // postCreateCommand: Executes a command/script ONCE.
+  // Timing: Runs after the container is created (and after updateContentCommand if present), but before VS Code connects.
+  // Use Case: Ideal for general one-time setup tasks like installing global tools, initializing databases, or cloning dependent repositories.
+  "postCreateCommand" : {},
 
-  // postStartCommand
-  "postStartCommand" : {
-    // Executes every time the container starts, before VS Code connects. 
-    // Useful for tasks that need to run each time the container boots, like starting background services.
-  },
+  // postStartCommand: Executes a command/script EVERY time the container starts.
+  // Timing: Runs after the container boots up (and after postCreateCommand on first start), but before VS Code connects.
+  // Use Case: Ideal for starting background services or running tasks needed at the beginning of each session.
+  "postStartCommand" : {},
 
-  // postAttachCommand
+  // postAttachCommand: Executes a command/script EVERY time VS Code attaches to the container.
+  // Timing: Runs after VS Code connects to the already running container (including on window reloads).
+  // Use Case: Ideal for commands related to the active VS Code session, like starting a development server in the integrated terminal.
   "postAttachCommand" : {
-    // Executes every time you attach VS Code to the container (including window reloads), after VS Code connects. 
-    // Good for commands specific to your VS Code session, like starting a development server in the integrated terminal.
     "test nvidia" : "nvidia-smi",
     "test nvcc" : "nvcc --version",
     "check python version" : "python3 --version",
@@ -42,7 +53,9 @@
     "test tensorflow" : "python3 /workspace/src/test_tensorflow_gpu_access.py"
   },
 
-  // Customizations for VS Code. These are largely optional, but included here are some popular extensions for additional functionality and convenience.
+  // customizations: Configures VS Code settings and extensions for this dev container.
+  // Details: Specifies extensions to install and settings to apply automatically inside the container.
+  // Use Case: Ensure required extensions (like linters, debuggers) and settings are available for the project.
   "customizations" : {
     "vscode" : {
       "extensions" : [
