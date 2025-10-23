@@ -26,6 +26,16 @@
   // Use Case: Ensures VS Code opens the correct folder containing your project code within the container environment.
   "workspaceFolder" : "/workspace",
 
+  // portsAttributes: Provides additional configuration for forwarded ports.
+  // Details: An object mapping port numbers (as strings) to settings like 'label', 'onAutoForward', 'protocol'.
+  // Use Case: Give descriptive names to forwarded ports in the UI, control auto-forwarding behavior.
+  "portsAttributes":{},
+
+  // remoteEnv: Sets environment variables specifically for VS Code Server and its processes (terminal, debugger).
+  // Details: An object mapping environment variable names to string values. These are applied after connecting.
+  // Use Case: Configure environment variables needed only by VS Code tools or override container-wide settings for the VS Code session.
+  "remoteEnv": {},
+
   // updateContentCommand: Executes a command/script ONCE.
   // Timing: Runs after the container is created and your project files are available inside, but before postCreateCommand.
   // Use Case: For setup needing the source code, like installing requirements from a cloned file or updating Git submodules.
@@ -87,5 +97,10 @@
         "ms-python.autopep8"
       ]
     }
-  }
+  },
+
+  // shutdownAction: Defines what happens to the container(s) when VS Code disconnects.
+  // Details: Valid values are "none" (container keeps running) or "stopCompose" (runs 'docker compose down' or stops the container if not using Compose).
+  // Use Case: Keep background processes running ("none") or automatically clean up resources ("stopCompose").
+  "shutdownAction": "stopCompose" // Or "none"
 }

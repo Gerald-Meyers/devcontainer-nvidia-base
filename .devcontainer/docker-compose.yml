@@ -2,8 +2,12 @@ version: '0.1.0'
 
 services:
   app:
-    # user:
+    # user: "user" # Runs the container processes as the 'user' user
+    # user: "1000:1000" # Can also use UID:GID
     # environment:
+      # EXAMPLE_VAR: "value"
+      # Can also use list format:
+      # - EXAMPLE_VAR=value
     build:
       context: ..
       dockerfile: .devcontainer/dev.Dockerfile
