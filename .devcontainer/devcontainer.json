@@ -26,15 +26,47 @@
   // Use Case: Ensures VS Code opens the correct folder containing your project code within the container environment.
   "workspaceFolder" : "/workspace",
 
+  // forwardPorts: Forwards ports from the container to the host machine.
+  // Details: An array of port numbers (e.g., [8000, 5432]) or ranges ("8000-8010"). Ports listed here become accessible via 
+  //    localhost:<port> on your local machine.
+  // Use Case: Access web applications, databases, TensorBoard, Jupyter, or other services running inside the container from your host's browser or tools.
+  "forwardPorts" : [],
+  
   // portsAttributes: Provides additional configuration for forwarded ports.
-  // Details: An object mapping port numbers (as strings) to settings like 'label', 'onAutoForward', 'protocol'.
+  // Details: An object mapping port numbers (as strings) to settings like 'label', 'onAutoForward', 'protocol'. 
+  //    This is an optional, and may subset the ports listed in "forwardPorts".
   // Use Case: Give descriptive names to forwarded ports in the UI, control auto-forwarding behavior.
-  "portsAttributes":{},
+  "portsAttributes" : {
+    // Port 8000: Give it a label and have VS Code notify you when it forwards
+    // "8000": {
+    //   "label": "Web App",         // Name shown in VS Code's "Ports" tab
+    //   "onAutoForward": "notify"   // Options: notify, openBrowser, openPreview, silent
+    //   "protocol": "http"          // Options: http, https; defaults to http
+ 
+    // onAutoForward: Controls VS Code's action when a forwarded port becomes active.
+    // Details: Specifies the behavior when the Dev Containers extension detects activity on a port listed in 'forwardPorts'.
+    // Options:
+    //   "notify"      - (Default) Show a notification asking if you want to open the port in a browser.
+    //   "openBrowser" - Automatically open the host's default web browser to the forwarded port (using http/https protocol if specified).
+    //   "openPreview" - Attempt to open the forwarded port in VS Code's embedded Simple Browser.
+    //   "silent"      - Forward the port without showing any notification or taking any action.
+
+    // protocol: Specifies the network protocol (http or https) used by the service on a forwarded port.
+    // Details: A string value, either "http" or "https". Defaults to "http" if omitted.
+    // Use Case: Helps VS Code construct the correct URL (e.g., http://localhost:<port> vs https://localhost:<port>) when using actions like "openBrowser" in 'onAutoForward'.
+  },
 
   // remoteEnv: Sets environment variables specifically for VS Code Server and its processes (terminal, debugger).
   // Details: An object mapping environment variable names to string values. These are applied after connecting.
   // Use Case: Configure environment variables needed only by VS Code tools or override container-wide settings for the VS Code session.
   "remoteEnv": {},
+
+  // overrideCommand: Determines whether the container's default command (ENTRYPOINT/CMD) should be overridden.
+  // Details: A boolean value (true or false). Defaults to true. When true, VS Code ignores the image's default command and runs a 
+  //    command like 'sleep infinity' to keep the container running idly. When false, the container runs its original ENTRYPOINT/CMD as defined in the Dockerfile.
+  // Use Case: Set to true (default) for typical development workflows where you want the container to stay alive for VS Code to connect. 
+  //    Set to false only if you specifically need the container's original ENTRYPOINT to run instead (uncommon for dev containers, as the container might exit).
+  "overrideCommand": true,
 
   // updateContentCommand: Executes a command/script ONCE.
   // Timing: Runs after the container is created and your project files are available inside, but before postCreateCommand.
