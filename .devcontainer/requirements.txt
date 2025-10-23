@@ -1,7 +1,9 @@
+tensorflow==2.16.1
+pandas
 numpy
-scikit-learn
+scipy
 matplotlib
-tensorflow
 autokeras
 ipykernel
+scikit-learn
 regex

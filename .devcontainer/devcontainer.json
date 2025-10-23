@@ -1,17 +1,77 @@
 {
-  "name": "CUDA",
-  "image": "nvidia/cuda:11.8.0-devel-ubuntu22.04", 
-  "runArgs": [
-    "--gpus=all"
-  ],
-  "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/usr/local/cuda/bin",
-    "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64",
-    "XLA_FLAGS": "--xla_gpu_cuda_data_dir=/usr/local/cuda"
+  "name": "Tensorflow Devcontainer",
+  // "image": "tensorflowbase:latest", 
+
+  "build": {
+    "context": "..",
+    // "context": ".",
+    "dockerfile": "dev.Dockerfile",
+    // "dockerfile": ".devcontainer/dev.Dockerfile",
+    "args": {
+      "VARIANT": "2.16.1-gpu"
+    },
+    "tags": [
+      "tensorflowbase:latest-gpu", // Apply the 'latest' tag
+      "tensorflowbase:2.16.0-gpu" // Also apply a version tag
+    ]
   },
-  "updateContentCommand": "bash .devcontainer/install-dev-tools.sh",
-  "postCreateCommand": [
-    "nvidia-smi"
+
+  "runArgs": [
+    "--gpus=all",
+    "--runtime=nvidia",
+    "--rm",
+    "-it"
+  ],
+
+  "remoteEnv": {
+    // "PATH": "${containerEnv:PATH}:/usr/local/cuda/bin",
+    // "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64",
+    // "XLA_FLAGS": "--xla_gpu_cuda_data_dir=/usr/local/cuda"
+  },
+
+  "updateContentCommand": {
+    // Runs once after the container is created and your source code is cloned or mounted, but before postCreateCommand executes. 
+    // It's specifically intended for tasks that need to happen after the source code is present but before general setup, 
+    // like updating submodules or installing dependencies based on the just-cloned code.
+    "bash .devcontainer/install-dev-tools.sh"
+  },
+
+  "postCreateCommand": {
+    // Executes once after the container is created, but before VS Code connects. 
+    // This is ideal for one-time setup tasks like installing dependencies, cloning repos, or initializing databases.
+    "test nvidia" : "nvidia-smi",
+    "test tensorflow" : "python3 test_tensorflow_gpu_access.py"
+  },
+
+  "postStartCommand" :{
+    // Executes every time the container starts, before VS Code connects. 
+    // Useful for tasks that need to run each time the container boots, like starting background services.
+  },
+
+  "postAttachCommand" :{
+    // Executes every time you attach VS Code to the container (including window reloads), after VS Code connects. 
+    // Good for commands specific to your VS Code session, like starting a development server in the integrated terminal.
+  },
+  // "postStopCommand" :{
+  //   // Probably a hallucination
+  //   // Executes every time the container stops, after VS Code disconnects.
+  // },
+
+// Defines the mount using Docker's --mount syntax.
+// "workspaceMount": "",
+// "workspaceFolder": "",
+"mounts": [
+    // Using -v syntax: Mount local .gitconfig
+    // "source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+
+    // Using --mount syntax: Mount Docker socket
+    // "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+
+    // Mount a named volume for persistent data
+    // "source=my-data-volume,target=/data,type=volume"
+
+    // Mount the gcloud config if needed
+    // "source=${env:APPDATA}\\gcloud,target=/root/.config/gcloud,type=bind,consistency=cached"
   ],
   "customizations": {
     "vscode": {
@@ -22,7 +82,8 @@
         "ms-toolsai.jupyter-keymap",
         "ms-toolsai.jupyter-renderers",
         "ms-toolsai.vscode-jupyter-slideshow",
-        "ms-python.vscode-pylance"
+        "ms-python.vscode-pylance",
+        "google.geminicodeassist"
       ]
     }
   }
