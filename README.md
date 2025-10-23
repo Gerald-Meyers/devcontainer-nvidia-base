@@ -1,5 +1,8 @@
 # Dev Container NVIDIA based
-That is an example of how to setup a NVIDIA DevContainer with GPU Support for Tensorflow/Keras, that follows the page [Setup a NVIDIA DevContainer with GPU Support for Tensorflow/Keras on Windows](https://alankrantas.medium.com/setup-a-nvidia-devcontainer-with-gpu-support-for-tensorflow-keras-on-windows-d00e6e204630).
+
+This is an example VSCode devcontainer that successfully builds and has access to the GPU using tensorflow. Some additional python modules are included mostly for arbitrary reasons. 
+The previous branch this came from was not particularly optimized to use the docker image building and caching service, and ran all installation steps after starting the image.
+This resulted in significant overhead and run-time with each start.
 
 ## Prerequisites
 - Docker engine (and setup .wslconfig to use more cores and memory than default)
@@ -11,7 +14,7 @@ That is an example of how to setup a NVIDIA DevContainer with GPU Support for Te
 - Clone this repo.
 - In VS Code press `Ctrl + Shift + P` to bring up the Command Palette. 
 - Enter and find `Dev Containers: Reopen in Container`. 
-- VS Code will starts to download the CUDA image, run the script and install everything, and finish opening the directory in DevContainer.
+- VS Code will starts to download the base image, building the docker image, install everything specified in the `dev.Dockerfile` & `requirements.txt`, and finish opening the directory in DevContainer.
 - The DevContainer would then run nvidia-smi to show what GPU can be seen by the container. Be noted that this works even without setting up cuDNN or any environment variables.
 
 ## Test with keras script for MNIST
@@ -24,43 +27,10 @@ Open a new terminal and enter:
 
 ## Setup details
 ### Dev Container definition
-DevContainer definition `.devcontainer/devcontainer.json` uses the official CUDA developer image `nvidia/cuda:11.8.0-devel-ubuntu22.04` (not base or runtime), which supports AMD64 and ARM64 and have CUDA installed. 
-It will run a script to install other stuff (including VS Code extensions) and finally run nvidia-smi after started up.
-
-```json
-{
-  "name": "CUDA",
-  "image": "nvidia/cuda:11.8.0-devel-ubuntu22.04",
-  "runArgs": [
-    "--gpus=all"
-  ],
-  "remoteEnv": {
-    "PATH": "${containerEnv:PATH}:/usr/local/cuda/bin",
-    "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64",
-    "XLA_FLAGS": "--xla_gpu_cuda_data_dir=/usr/local/cuda"
-  },
-  "updateContentCommand": "bash .devcontainer/install-dev-tools.sh",
-  "postCreateCommand": [
-    "nvidia-smi"
-  ],
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-python.python",
-        "ms-toolsai.jupyter",
-        "ms-toolsai.vscode-jupyter-cell-tags",
-        "ms-toolsai.jupyter-keymap",
-        "ms-toolsai.jupyter-renderers",
-        "ms-toolsai.vscode-jupyter-slideshow",
-        "ms-python.vscode-pylance"
-      ]
-    }
-  }
-}
-```
+DevContainer definition `.devcontainer/devcontainer.json` uses the official tensorflow developer image `tensorflow/tensorflow:2.16.1-gpu` (not base or runtime), which supports AMD64 and ARM64 and has CUDA installed. 
 
 ### Installing basic Linux tools, Python 3, Python packages and cuDNN
-The script for installing basic Linux tools, Python 3, Python packages and cuDNN is `.devcontainer/install-dev-tools.sh`. Downloaded file will be removed so it won’t appear in your local directory.
+This is the original script for installing basic based on the original nvidia image. The file is mostly empty but included for the sake of posterity: `.devcontainer/install-dev-tools.sh`. 
 
 ```bash
 # update system
@@ -97,12 +67,14 @@ apt-get clean
 The file `.devcontainer/requirements.txt` contains all third party Python packages you wish to install. Modify the list as you like.
 
 ```
+tensorflow==2.16.1
+pandas
 numpy
-scikit-learn
+scipy
 matplotlib
-tensorflow
 autokeras
 ipykernel
+scikit-learn
 regex
 ```
 
