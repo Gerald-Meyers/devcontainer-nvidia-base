@@ -1,4 +1,4 @@
-version: '0.1.0'
+version: '3.8'
 
 services:
   app:
@@ -30,7 +30,16 @@ services:
       # Add other mounts here if needed, corresponding to devcontainer.json -> mounts
       # Example: Mount gcloud config (adjust source path if needed)
       # - ${APPDATA}/gcloud:/root/.config/gcloud:cached 
+      # Example: Mount the host's S: drive to /mnt/storage inside this container
+      # - /s/:/mnt/storage:cached
+      # Or potentially: 
+      # - //s/:/mnt/s_drive:cached
       # Windows host path needs escaping or different env var handling
+      # --- Portable Mount Examples ---
+      # Example: Mount a sub-directory for configs
+      # - ./config:/app/config:ro # Mounts './config' read-only
+      # Example: Use a named volume (defined below) for persistent data
+      # - app_data:/app/data
     
     # Keeps the container running for VS Code to attach
     command: sleep infinity
@@ -52,4 +61,24 @@ services:
     # ports:
     #   - "8080:8080"
 
-volumes:
+  # --- Example: PostgreSQL Service with Portable Data Volume ---
+  # db:
+  #   image: postgres:15
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: mydatabase
+  #     POSTGRES_USER: myuser
+  #     POSTGRES_PASSWORD: mysecretpassword # Use secrets in production!
+  #   volumes:
+  #     # Mount the Docker-managed named volume 'postgres_data'
+  #     - postgres_data:/var/lib/postgresql/data
+  #   # ports:
+  #   #   - "5432:5432"
+
+# --- Top-Level Volume Declarations ---
+# Define Docker-managed named volumes here for persistent data.
+# Docker handles where these are stored on the host, making it portable.
+# volumes:
+#   postgres_data:
+#     # driver: local # Default driver
+#   app_data:
