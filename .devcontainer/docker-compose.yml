@@ -1,0 +1,42 @@
+version: '0.1.0'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: dev.Dockerfile
+      # args:
+        # EXAMPLE_ARG: value
+        # VARIANT: 2.16.1-gpu
+      tags:
+        # Any tags desired may be 
+        # passed here in the <name>:<tag> format.
+        - "tensorflowbase:latest-gpu"
+        - "tensorflowbase:2.16.1-gpu"
+    # Mount your project code into the container
+    volumes:
+      - .:/workspace:cached
+      # Add other mounts here if needed, corresponding to devcontainer.json -> mounts
+      # Example: Mount gcloud config (adjust source path if needed)
+      # - ${APPDATA}/gcloud:/root/.config/gcloud:cached 
+      # Windows host path needs escaping or different env var handling
+    
+    # Keeps the container running for VS Code to attach
+    command: sleep infinity
+    
+    # --- GPU Configuration ---
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all # Or specify specific GPU IDs
+              capabilities: [gpu]
+    
+    # Equivalent of remoteEnv
+    # environment:
+    #   EXAMPLE_ENV_VAR: value
+
+    # Equivalent of runArgs port mapping (-p)
+    # ports:
+    #   - "8080:8080"

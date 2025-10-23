@@ -2,58 +2,12 @@
   "name" : "Tensorflow Devcontainer",
   // "image": "tensorflow/tensorflow:2.16.1-gpu", // If you don't want to build the image yourself, you can use this pre-built image.
 
-  // "dockerComposeFile" : [
-  //   "../docker-compose.yml"
-  // ],
-
-  "build" : {
-    // Specify the build context and Dockerfile. 
-
-    // "." is used to specify the exact folder containing the Dockerfile during the build process.
-    // ".." is used to specify the parent folder during the build process.
-    "context" : "..",
-
-    // Specify the Dockerfile to use for building the image.
-    // The name of the file should be provided here, and should be in the same folder as the devcontainer.json file.
-    "dockerfile" : "dev.Dockerfile",
-    
-    // Pass build arguments here. These can be used to customize the build process.
-    "args": {
-      // "EXAMPLE_ARG": "value",
-      // "VARIANT" : "2.16.1-gpu"
-    },
-    
-    // Specify tags to apply to the built image.
-    "tags": [
-      // Any tags desired may be passed here in the <name>:<tag> format.
-      "tensorflowbase:latest-gpu", // Apply the 'latest' tag
-      "tensorflowbase:2.16.1-gpu" // Apply a version tag
-    ]
-  },
-
-  // Specify runtime arguments for the container.
-  "runArgs": [
-    // GPU support
-    "--gpus=all",
-
-    // Use the NVIDIA runtime
-    "--runtime=nvidia",
-
-    // Automatically remove the container when it exits
-    "--rm",
-
-    // Keep STDIN open even if not attached
-    "-it"
-
-    // Publish port for external access.
-    // "-p 8080:8080"
+  "dockerComposeFile" : [
+    "../docker-compose.yml"
   ],
 
-  "remoteEnv": {
-    // Specify environment variables to pass to the container.
-    // "EXAMPLE_ENV_VAR": "value"
-  },
-
+  "service": "app",
+  
   "updateContentCommand" : {
     // Runs once after the container is created and your source code is cloned or mounted, but before postCreateCommand executes. 
     // It's specifically intended for tasks that need to happen after the source code is present but before general setup, 
@@ -80,24 +34,6 @@
     "check tensorflow" : "python3 -c \"import tensorflow as tf; print(f'TensorFlow Version: {tf.__version__}'); gpus = tf.config.list_physical_devices('GPU'); print(f'Found GPUs: {gpus}'); assert len(gpus) > 0, 'ERROR: No GPU detected'\"",
     "test tensorflow" : "python3 /workspaces/devcontainer_test/src/test_tensorflow_gpu_access.py"
   },
-
-// Defines the mount using Docker's --mount syntax.
-// "workspaceMount": "",
-// "workspaceFolder": "",
-
-"mounts" : [
-    // Using -v syntax: Mount local .gitconfig
-    // "source=${env:HOME}${env:USERPROFILE}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
-
-    // Using --mount syntax: Mount Docker socket
-    // "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
-
-    // Mount a named volume for persistent data
-    // "source=my-data-volume,target=/data,type=volume"
-
-    // Mount the gcloud config if needed
-    // "source=${env:APPDATA}\\gcloud,target=/root/.config/gcloud,type=bind,consistency=cached"
-  ],
 
   // Customizations for VS Code. These are largely optional, but included here are some popular extensions for additional functionality and convenience.
   "customizations" : {
