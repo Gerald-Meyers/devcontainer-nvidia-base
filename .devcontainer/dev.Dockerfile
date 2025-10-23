@@ -17,32 +17,20 @@ ENV TF_CPP_MIN_LOG_LEVEL=1
 # Update environment variable
 ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH}"
 
+COPY \
+    .devcontainer/apt-packages.txt \
+    /tmp/apt-packages.txt
+
+
 # Longer lines are split to improve readability. Large installation groups are handled in a single RUN command to improve caching.
 RUN \
     --mount=type=cache,target=/var/cache/apt \
     # Now, run the update and install packages.
     apt-get update && apt-get install -y --no-install-recommends \
-        # For monitoring system resources.
-        htop \              
-        # For downloading files.
-        wget \              
-        # For secure communications.
-        ca-certificates \   
-        # For privilege escalation.
-        sudo \              
-        # For managing keys.
-        curl \              
-        # For version control and collaboration.
-        git \               
-        # For extracting zip files.
-        unzip \             
-        # For file editing.
-        vim \
-        # For encryption and signing.
-        gnupg2 \
+        $(grep -vE '^\s*#|^\s*$' /tmp/apt-packages.txt | xargs) \
     && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /tmp/apt-packages.txt
 
 # Copy the requirements file and install Python dependencies
 COPY \

@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ..
-      dockerfile: dev.Dockerfile
+      dockerfile: .devcontainer/dev.Dockerfile
       # args:
         # EXAMPLE_ARG: value
         # VARIANT: 2.16.1-gpu
@@ -15,7 +15,7 @@ services:
         - "tensorflowbase:2.16.1-gpu"
     # Mount your project code into the container
     volumes:
-      - .:/workspace:cached
+      - ..:/workspace:cached
       # Add other mounts here if needed, corresponding to devcontainer.json -> mounts
       # Example: Mount gcloud config (adjust source path if needed)
       # - ${APPDATA}/gcloud:/root/.config/gcloud:cached 
