@@ -11,7 +11,7 @@
 
     // Specify the Dockerfile to use for building the image.
     // The name of the file should be provided here, and should be in the same folder as the devcontainer.json file.
-    "dockerFile" : "dev.Dockerfile",
+    "dockerfile" : "dev.Dockerfile",
     
     // Pass build arguments here. These can be used to customize the build process.
     "args": {
@@ -118,7 +118,11 @@
         "ms-python.vscode-pylance",
         
         // Google Gemini Code Assist as another option instead of Copilot
-        "google.geminicodeassist"
+        "google.geminicodeassist",
+
+        // Autopep8 for Python code formatting
+        "ms-python.autopep8"
+
       ]
     }
   }
