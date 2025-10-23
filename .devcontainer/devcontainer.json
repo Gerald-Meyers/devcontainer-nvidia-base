@@ -6,8 +6,10 @@
     "../docker-compose.yml"
   ],
 
+  // The name of the docker image to be run.
   "service": "app",
   
+  // updateContentCommand extends the functionality of the base image.
   "updateContentCommand" : {
     // Runs once after the container is created and your source code is cloned or mounted, but before postCreateCommand executes. 
     // It's specifically intended for tasks that need to happen after the source code is present but before general setup, 
@@ -15,16 +17,19 @@
     // "install dev tools" : "bash .devcontainer/install-dev-tools.sh"
   },
 
+  // postCreateCommand
   "postCreateCommand" : {
     // Executes once after the container is created, but before VS Code connects. 
     // This is ideal for one-time setup tasks like installing dependencies, cloning repos, or initializing databases.
   },
 
+  // postStartCommand
   "postStartCommand" : {
     // Executes every time the container starts, before VS Code connects. 
     // Useful for tasks that need to run each time the container boots, like starting background services.
   },
 
+  // postAttachCommand
   "postAttachCommand" : {
     // Executes every time you attach VS Code to the container (including window reloads), after VS Code connects. 
     // Good for commands specific to your VS Code session, like starting a development server in the integrated terminal.
