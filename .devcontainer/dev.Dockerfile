@@ -30,7 +30,7 @@ RUN \
 
 # Copy the requirements file and install Python dependencies
 COPY \
-    .devcontainer/requirements.txt \
+    .devcontainer/python_requirements.txt \
     /tmp/requirements.txt
 
 # Install Python dependencies
